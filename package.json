@@ -1,0 +1,28 @@
+{
+  "name": "holidayplannerapp-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sf-fresher-batch-2020/holidayplannerapp-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sf-fresher-batch-2020/holidayplannerapp-api/issues"
+  },
+  "homepage": "https://github.com/sf-fresher-batch-2020/holidayplannerapp-api#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.0.0-alpha.8",
+    "mysql2": "^2.2.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
