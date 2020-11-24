@@ -35,9 +35,10 @@ const express = require('express')
    //viewdestinations
    app.post('/api/viewdestination',viewdestinations);
     app.get('/api/viewdestination',getAlldestinations);
-    //packages
-    app.post('/api/bookingdetails',bookdetails);
-    app.get('/api/bookingdetails',getbookings)
+
+    //Bookpackages
+    /*app.post('/api/bookingdetails',bookdetails);
+    app.get('/api/bookingdetails',getbookings)*/
 
 
 
@@ -115,7 +116,7 @@ const express = require('express')
 
 
      //BOOk PACKAGES 
-     async function bookdetails(req,res){
+    /* async function bookdetails(req,res){
          let package=req.body;
          let params=[package.book_id,package.packagename,package.price,package.duration,package.facilities];
          const result =await pool.query(" insert into bookpackage(book_id,packagename,price,duration,facilities) values (?,?,?,?,?)", params);
@@ -125,7 +126,7 @@ const express = require('express')
      async function getbookings(req, res){
          const result= await pool.query("SELECT * from bookpackage");
          res.status(200).json(result[0]);
-     }
+     }*/
 
 
 
