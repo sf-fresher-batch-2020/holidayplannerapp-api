@@ -1,17 +1,29 @@
 const express = require('express')
     const app = express()
     const port = 3000
-    app.use(express.json())
+    const cors = require('cors');
+    app.use(cors());
+    app.use(express.json());
 
     // Create Connection Pool
     const mysql = require("mysql2/promise");
+const { request } = require('express');
+
+    // const pool = mysql.createPool({
+    //     host: process.env.DB_URL || "localhost",
+    //     port: 3306,
+    //     user: process.env.DB_USER || "root",
+    //     password: process.env.DB_PASSWORD || "ashpikachu@123",
+    //     database: process.env.DB_NAME || "holiday_app",
+    //     connectionLimit: 10
+    // });
 
     const pool = mysql.createPool({
-        host: process.env.DB_URL || "localhost",
+        host: "localhost",
         port: 3306,
-        user: process.env.DB_USER || "root",
-        password: process.env.DB_PASSWORD || "ashpikachu@123",
-        database: process.env.DB_NAME || "holiday_app",
+        user: "root",
+        password: "ashpikachu@123",
+        database: "holiday_app",
         connectionLimit: 10
     });
     
@@ -21,7 +33,7 @@ const express = require('express')
     //users
     app.get('/api/users', getAllUsers);
     app.post('/api/users', createUser);
-    app.post('/api/users/login',login);
+    app.post('/api/users',login);
 
     //destination
     app.post('/api/destination',destination);
@@ -30,6 +42,7 @@ const express = require('express')
     //package details
     app.post('/api/packages',packages);
     app.get('/api/packages',getAllpackages);
+    app.get('/api/packages/:id',getpackages);
     app.post('/api/packages/update', updatepackage);
     
    //viewdestinations
@@ -83,8 +96,8 @@ const express = require('express')
     //package details
     async function packages(req,res){
         let pack = req.body;
-        let params = [pack.Duration,pack.Ratings,pack.Facilities,pack.Price];
-        const result = await pool.query("insert into packages (Duration,Ratings,Facilities,Price) values (?,?,?,?)", params);    
+        let params = [pack.id,pack.Duration,pack.Ratings,pack.Facilities,pack.Price];
+        const result = await pool.query("insert into packages (id,Duration,Ratings,Facilities,Price) values (?,?,?,?,?)", params);    
         res.status(201).json({id:result[0].insertId});    
     }
 
@@ -98,6 +111,12 @@ const express = require('express')
          const result=await pool.query("SELECT * from packages");
          res.status(200).json(result[0]);
      }
+     async function getpackages(req,res){
+        const result=await pool.query("SELECT * from packages where id=?",[req.params.id]);
+        const rows = result[0];
+        const package = rows.length>0 ? rows[0]: null;  //[{id:1,...}]or  []
+        res.status(200).json(package);
+    }
 
      //view destination
      async function viewdestinations(req,res){
