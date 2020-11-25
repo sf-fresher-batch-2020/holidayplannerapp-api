@@ -48,11 +48,12 @@ const { request } = require('express');
    //viewdestinations
    app.post('/api/viewdestination',viewdestinations);
     app.get('/api/viewdestination',getAlldestinations);
+    app.get('/api/viewdestination/:id',getdestinations);
 
     //Bookpackages
-    /*app.post('/api/bookingdetails',bookdetails);
-    app.get('/api/bookingdetails',getbookings)*/
-
+    app.post('/api/bookings',bookdetails);
+    app.get('/api/bookings',getbookings);
+    app.put('/api/bookings/:id',updatebooking);
 
 
     //register and login
@@ -131,22 +132,37 @@ const { request } = require('express');
         res.status(200).json(result[0]);
     }
 
+    async function getdestinations(req,res){
+        const result=await pool.query("SELECT * from viewdestination where id=?",[req.params.id]);
+        const rows=result[0];
+        const destination=rows.length>0 ? rows[0]: null;
+        res.status(200).json(destination);
+    }
+
 
 
 
      //BOOk PACKAGES 
-    /* async function bookdetails(req,res){
+    async function bookdetails(req,res){
          let package=req.body;
-         let params=[package.book_id,package.packagename,package.price,package.duration,package.facilities];
-         const result =await pool.query(" insert into bookpackage(book_id,packagename,price,duration,facilities) values (?,?,?,?,?)", params);
+         let params=[package.createdBy,package.package.id,package.Startdate,package.enddate];
+         const result =await pool.query("insert into bookings(user_id,pack_id,start_date,end_date) values(?,?,?,?)",params);
+         
          res.status(201).json({booking_id:result[0].insertId})
      }
 
      async function getbookings(req, res){
-         const result= await pool.query("SELECT * from bookpackage");
+         const result= await pool.query("SELECT b.*, p.Ratings,p.Duration,p.price,p.Facilities,u.name from bookings b, packages p, users u where b.pack_id = p.id and b.user_id = u.id");
          res.status(200).json(result[0]);
-     }*/
-
+     }
+     async function updatebooking(req,res){
+        let package=req.body;
+        let params=[package.status,req.params.id];
+        const result =await pool.query("update bookings set status=? where id=? ",params);
+        
+        
+        res.status(201).json({booking_id:result[0].info})
+    }
 
 
     // Create Commmon Error Handler
