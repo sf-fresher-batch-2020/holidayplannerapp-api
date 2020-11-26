@@ -43,7 +43,8 @@ const { request } = require('express');
     app.post('/api/packages',packages);
     app.get('/api/packages',getAllpackages);
     app.get('/api/packages/:id',getpackages);
-    app.post('/api/packages/update', updatepackage);
+    app.delete('/api/packages/:id',deletepackage);
+    app.put('/api/packages/:id', updatepackage);
     
    //viewdestinations
    app.post('/api/viewdestination',viewdestinations);
@@ -98,14 +99,14 @@ const { request } = require('express');
     async function packages(req,res){
         let pack = req.body;
         let params = [pack.id,pack.Duration,pack.Ratings,pack.Facilities,pack.Price];
-        const result = await pool.query("insert into packages (id,Duration,Ratings,Facilities,Price) values (?,?,?,?,?)", params);    
+        const result = await pool.query("insert into packages(id,Duration,Ratings,Facilities,Price) values (?,?,?,?,?)", params);    
         res.status(201).json({id:result[0].insertId});    
     }
 
     async function updatepackage(req,res){
-        let pack = req.body;
-        let params = [pack.duration,pack.Ratings,pack.Facilities,pack.Price];
-        const result = await pool.query("UPDATE packages SET Duration=?,Ratings =?, Facilities =?, Price=? WHERE id= ?",params);    
+       let pack=req.body;
+        let params =[pack.Duration,pack.Ratings,pack.Facilities,pack.Price,req.params.id];
+        const result = await pool.query("UPDATE packages SET Duration=?, Ratings =?, Facilities =?, Price=? WHERE id= ?",params);    
         res.status(201).json(result[0].info);    
     }
      async function getAllpackages(req,res){
@@ -118,6 +119,16 @@ const { request } = require('express');
         const package = rows.length>0 ? rows[0]: null;  //[{id:1,...}]or  []
         res.status(200).json(package);
     }
+   
+    async function deletepackage(req,res){
+        const id=req.params.id;
+        let params=[id];
+        const result=await pool.query("DELETE from packages WHERE id= ?",params);
+        res.status(201).json(result[0].info);
+    }
+
+
+
 
      //view destination
      async function viewdestinations(req,res){
@@ -139,7 +150,8 @@ const { request } = require('express');
         res.status(200).json(destination);
     }
 
-
+    
+    
 
 
      //BOOk PACKAGES 
@@ -159,8 +171,6 @@ const { request } = require('express');
         let package=req.body;
         let params=[package.status,req.params.id];
         const result =await pool.query("update bookings set status=? where id=? ",params);
-        
-        
         res.status(201).json({booking_id:result[0].info})
     }
 
