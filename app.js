@@ -9,24 +9,15 @@ const express = require('express')
     const mysql = require("mysql2/promise");
 const { request } = require('express');
 
-    // const pool = mysql.createPool({
-    //     host: process.env.DB_URL || "localhost",
-    //     port: 3306,
-    //     user: process.env.DB_USER || "root",
-    //     password: process.env.DB_PASSWORD || "ashpikachu@123",
-    //     database: process.env.DB_NAME || "holiday_app",
-    //     connectionLimit: 10
-    // });
+     const pool = mysql.createPool({
+         host: process.env.DB_URL || "localhost",
+         port: 3306,
+         user: process.env.DB_USER || "root",
+         password: process.env.DB_PASSWORD || "ashpikachu@123",
+         database: process.env.DB_NAME || "holiday_app",
+         connectionLimit: 10
+     });
 
-    const pool = mysql.createPool({
-        host: "localhost",
-        port: 3306,
-        user: "root",
-        password: "ashpikachu@123",
-        database: "holiday_app",
-        connectionLimit: 10
-    });
-    
 
 
     // Create Routes
