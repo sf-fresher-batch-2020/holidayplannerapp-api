@@ -18,13 +18,13 @@ const { request } = require('express');
          connectionLimit: 10
      });
 
-
+app.get('/', (req,res)=>res.send("API Server working"));
 
     // Create Routes
     //users
     app.get('/api/users', getAllUsers);
     app.post('/api/users', createUser);
-    app.post('/api/users',login);
+   app.post('/api/users/login',login);
 
     //destination
     app.post('/api/destination',destination);
