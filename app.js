@@ -24,7 +24,6 @@ app.get('/', (req,res)=>res.send("API Server working"));
     //users
     app.get('/api/users', getAllUsers);
     app.post('/api/users', createUser);
-   app.post('/api/users/login',login);
 
     //destination
     app.post('/api/destination',destination);
@@ -81,7 +80,8 @@ app.get('/', (req,res)=>res.send("API Server working"));
     }
     
     async function getDestinations(req,res){    
-        const result = await pool.query("SELECT id,title,description from destination");    
+        const result = await pool.query("SELECT id,title,description,img_url from destination");    
+        console.log(result[0]);
         res.status(200).json(result[0]);
     }
 
@@ -173,4 +173,4 @@ app.get('/', (req,res)=>res.send("API Server working"));
         res.json({errorMessage:err.message});
     })
 
-    app.listen(port, () => console.log(`app listening on port port!`))
+    app.listen(port, () => console.log(`app listening on port ${port}!`))
